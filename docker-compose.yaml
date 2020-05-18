@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+    balances_db:
+        image: postgres:12.1-alpine
+        container_name: balances_db
+        volumes:
+            - ./docker/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+        environment:
+            - POSTGRES_DB=balances_db
+            - POSTGRES_USER=balances_db_user
+            - POSTGRES_PASSWORD=ipYABXQr8jsKNvniaAz
+        ports:
+            - 8032:5432
+
+    balances_php:
+        build: docker/php
+        container_name: balances_php
+        restart: always
+        tty: true
+        volumes:
+          - .:/srv/balances:delegated
