@@ -1,0 +1,31 @@
+parameters:
+    ~
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Aleksbrgt\Balances\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    Aleksbrgt\Balances\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    Aleksbrgt\Balances\Service\Client\BlockchairClientFactory:
+        arguments:
+            $client: '@eight_points_guzzle.client.blockchair'
+
+    app.api_client.get_address_information:
+        class: Aleksbrgt\Balances\Service\Client\ApiClient
+        factory: ['@Aleksbrgt\Balances\Service\Client\BlockchairClientFactory', create]
+        arguments:
+            $method: GET
+            $uriTemplate: /{currency}/dashboards/address/{address}
+
+
+    Aleksbrgt\Balances\Service\Address\Blockchair\GetAddressInformation:
+        arguments:
+            $client: '@app.api_client.get_address_information'

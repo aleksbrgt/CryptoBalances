@@ -1,0 +1,4 @@
+eight_points_guzzle:
+    clients:
+        blockchair:
+            base_url: https://api.blockchair.com
