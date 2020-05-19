@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Aleksbrgt\Balances\Service\ApiIntegration\Blockchair;
-
 
 use Aleksbrgt\Balances\Entity\Address;
 use Aleksbrgt\Balances\Enum\AddressCurrencyEnum;

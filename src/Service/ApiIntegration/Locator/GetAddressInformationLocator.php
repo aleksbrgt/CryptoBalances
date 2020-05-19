@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Aleksbrgt\Balances\Service\ApiIntegration\Locator;
-
 
 use Aleksbrgt\Balances\Entity\Address;
 use Aleksbrgt\Balances\Service\ApiIntegration\Abstraction\GetAddressInformationInterface;

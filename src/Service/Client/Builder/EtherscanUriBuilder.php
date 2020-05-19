@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Aleksbrgt\Balances\Service\Client\Builder;
-
 
 use Aleksbrgt\Balances\Service\Client\DTO\Abstraction\ClientInformationDtoInterface;
 use Aleksbrgt\Balances\Service\Client\DTO\Abstraction\RequestParametersDtoInterface;

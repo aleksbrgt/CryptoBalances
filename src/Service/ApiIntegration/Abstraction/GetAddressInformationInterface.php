@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Aleksbrgt\Balances\Service\ApiIntegration\Abstraction;
-
 
 use Aleksbrgt\Balances\Entity\Address;
 use Aleksbrgt\Balances\Service\ApiIntegration\Dto\AddressInformationDto;

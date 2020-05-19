@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Aleksbrgt\Balances\Service\Client;
-
 
 use Aleksbrgt\Balances\Service\Client\Abstraction\ApiClientInterface;
 use Aleksbrgt\Balances\Service\Client\Builder\UriBuilder;

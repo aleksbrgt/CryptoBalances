@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Aleksbrgt\Balances\Service\Address;
-
 
 use Aleksbrgt\Balances\Entity\Address;
 use Aleksbrgt\Balances\Repository\AddressRepository;

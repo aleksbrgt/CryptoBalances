@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Aleksbrgt\Balances\Repository;
-
 
 use Aleksbrgt\Balances\Entity\Address;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
