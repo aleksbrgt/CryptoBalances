@@ -1,10 +1,16 @@
 parameters:
-    ~
+    etherscanApiKey: '%env(ETHERSCAN_API_KEY)%'
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
+
+    _instanceof:
+        Aleksbrgt\Balances\Service\ApiIntegration\Abstraction\GetAddressInformationInterface:
+            tags: ['app.address.get_information']
+        Aleksbrgt\Balances\Service\ApiIntegration\Abstraction\GetCurrencyPriceInterface:
+            tags: ['app.address.get_price']
 
     Aleksbrgt\Balances\:
         resource: '../src/*'
@@ -14,18 +20,61 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    Aleksbrgt\Balances\Service\Client\BlockchairClientFactory:
+    Aleksbrgt\Balances\Service\Client\Factory\EtherscanClientFactory:
         arguments:
-            $client: '@eight_points_guzzle.client.blockchair'
+            $etherscanClient: '@eight_points_guzzle.client.etherscan'
 
-    app.api_client.get_address_information:
+    Aleksbrgt\Balances\Service\Client\Factory\CryptocompareClientFactory:
+        arguments:
+            $cryptocompareClient: '@eight_points_guzzle.client.cryptocompare'
+
+    Aleksbrgt\Balances\Service\Client\Builder\EtherscanUriBuilder:
+        arguments:
+            $apiKey: '%etherscanApiKey%'
+
+
+    Aleksbrgt\Balances\Service\Client\Factory\BlockchairClientFactory:
+        arguments:
+            $blockchairClient: '@eight_points_guzzle.client.blockchair'
+
+
+    app.blockchair.get_address_information:
         class: Aleksbrgt\Balances\Service\Client\ApiClient
-        factory: ['@Aleksbrgt\Balances\Service\Client\BlockchairClientFactory', create]
+        factory: ['@Aleksbrgt\Balances\Service\Client\Factory\BlockchairClientFactory', create]
         arguments:
             $method: GET
-            $uriTemplate: /{currency}/dashboards/address/{address}
+            $uriTemplate: /bitcoin/dashboards/address/{address}
 
-
-    Aleksbrgt\Balances\Service\Address\Blockchair\GetAddressInformation:
+    app.etherscan.get_address_information:
+        class: Aleksbrgt\Balances\Service\Client\ApiClient
+        factory: ['@Aleksbrgt\Balances\Service\Client\Factory\EtherscanClientFactory', create]
         arguments:
-            $client: '@app.api_client.get_address_information'
+            $method: GET
+            $uriTemplate: ?module=account&action=balance&address={address}&tag=latest
+
+    app.cryptocompare.get_symbol_price_ticker:
+        class: Aleksbrgt\Balances\Service\Client\ApiClient
+        factory: ['@Aleksbrgt\Balances\Service\Client\Factory\CryptocompareClientFactory', create]
+        arguments:
+            $method: GET
+            $uriTemplate: /data/pricemulti
+
+    Aleksbrgt\Balances\Service\ApiIntegration\Etherscan\GetAddressInformation:
+        arguments:
+            $client: '@app.etherscan.get_address_information'
+
+    Aleksbrgt\Balances\Service\ApiIntegration\Blockchair\GetAddressInformation:
+        arguments:
+            $client: '@app.blockchair.get_address_information'
+
+    Aleksbrgt\Balances\Service\ApiIntegration\Cryptocompare\GetCurrencyPrice:
+        arguments:
+            $client: '@app.cryptocompare.get_symbol_price_ticker'
+
+    # Locators
+    Aleksbrgt\Balances\Service\ApiIntegration\Locator\GetAddressInformationLocator:
+        arguments:
+            $services: !tagged app.address.get_information
+    Aleksbrgt\Balances\Service\ApiIntegration\Locator\GetCurrencyPriceLocator:
+        arguments:
+            $services: !tagged app.address.get_price

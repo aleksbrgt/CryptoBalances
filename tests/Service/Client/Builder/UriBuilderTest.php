@@ -76,6 +76,25 @@ class UriBuilderTest extends TestCase
                 ],
                 'expected' => 'foo/bar?param1=foo&param2=bar&param3%5B0%5D=lorem&param3%5B1%5D=ipsum&param3%5B2%5D=dolor',
             ],
+            [
+                'uriTemplate' => '{param1}/{param2}',
+                'pathParameters' => [
+                    'param1' => 'foo',
+                    'param2' => 'bar',
+                ],
+                'queryParameters' => null,
+                'expected' => 'foo/bar',
+            ],
+            [
+                'uriTemplate' => 'route/to/endpoint?param1=foo&param2={param2}',
+                'pathParameters' => [
+                    'param2' => 'bar',
+                ],
+                'queryParameters' => [
+                    'param3' => 'baz',
+                ],
+                'expected' => 'route/to/endpoint?param1=foo&param2=bar&param3=baz',
+            ],
         ];
     }
 

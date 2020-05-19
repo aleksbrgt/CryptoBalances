@@ -1,31 +1,30 @@
 <?php
 
 
-namespace Aleksbrgt\Balances\Service\Client;
+namespace Aleksbrgt\Balances\Service\Client\Factory;
 
 
 use Aleksbrgt\Balances\Service\Client\Abstraction\ApiClientInterface;
+use Aleksbrgt\Balances\Service\Client\ApiClient;
 use Aleksbrgt\Balances\Service\Client\Builder\UriBuilder;
 use Aleksbrgt\Balances\Service\Client\DTO\ClientInformationDto;
 use GuzzleHttp\ClientInterface;
 
-class BlockchairClientFactory
+class CryptocompareClientFactory
 {
     /** @var ClientInterface */
-    private $client;
+    private $cryptocompareClient;
 
     /** @var UriBuilder */
     private $uriBuilder;
 
     /**
-     * @param ClientInterface $client
+     * @param ClientInterface $cryptocompareClient
      * @param UriBuilder $uriBuilder
      */
-    public function __construct(
-        ClientInterface $client,
-        UriBuilder  $uriBuilder
-    ) {
-        $this->client = $client;
+    public function __construct(ClientInterface $cryptocompareClient, UriBuilder $uriBuilder)
+    {
+        $this->cryptocompareClient = $cryptocompareClient;
         $this->uriBuilder = $uriBuilder;
     }
 
@@ -40,11 +39,11 @@ class BlockchairClientFactory
         string $uriTemplate
     ): ApiClientInterface {
         return new ApiClient(
-            clone $this->client,
+            clone $this->cryptocompareClient,
             (new ClientInformationDto())
                 ->setMethod($method)
                 ->setUriTemplate($uriTemplate),
-            $this->uriBuilder
+            clone $this->uriBuilder
         );
     }
 }

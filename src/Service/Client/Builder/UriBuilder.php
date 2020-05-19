@@ -10,23 +10,41 @@ class UriBuilder
 {
     private const REGEX = '({(\w+)})';
 
+    /**
+     * @param ClientInformationDtoInterface $clientInformation
+     * @param RequestParametersDtoInterface $requestParameters
+     *
+     * @return string
+     */
     public function build(
         ClientInformationDtoInterface $clientInformation,
         RequestParametersDtoInterface $requestParameters
     ): string {
-        $uri = $clientInformation->getUriTemplate();
+        $uriTemplate = $clientInformation->getUriTemplate();
         $pathParameters = $requestParameters->getPathParameters() ?? [];
         $queryParameters = $requestParameters->getQueryParameters() ?? [];
 
         if (0 !== count($pathParameters)) {
-            $uri = $this->addPathParametersToUri($uri, $pathParameters);
+            $uriTemplate = $this->addPathParametersToUri($uriTemplate, $pathParameters);
         }
 
         if (0 !== count($queryParameters)) {
-            $uri = sprintf('%s?%s', $uri, http_build_query($queryParameters));
+            $joinChar =  '?';
+
+            $query = parse_url($uriTemplate)['query'] ?? null;
+            if (null !== $query) {
+                $joinChar = '&';
+            }
+
+            $uriTemplate = sprintf(
+                '%s%s%s',
+                $uriTemplate,
+                $joinChar,
+                http_build_query($queryParameters)
+            );
         }
 
-        return $uri;
+        return $uriTemplate;
     }
 
     /**
