@@ -13,18 +13,18 @@ use GuzzleHttp\ClientInterface;
 class CryptocompareClientFactory
 {
     /** @var ClientInterface */
-    private $cryptocompareClient;
+    private $client;
 
     /** @var UriBuilder */
     private $uriBuilder;
 
     /**
-     * @param ClientInterface $cryptocompareClient
+     * @param ClientInterface $client
      * @param UriBuilder $uriBuilder
      */
-    public function __construct(ClientInterface $cryptocompareClient, UriBuilder $uriBuilder)
+    public function __construct(ClientInterface $client, UriBuilder $uriBuilder)
     {
-        $this->cryptocompareClient = $cryptocompareClient;
+        $this->client = $client;
         $this->uriBuilder = $uriBuilder;
     }
 
@@ -39,7 +39,7 @@ class CryptocompareClientFactory
         string $uriTemplate
     ): ApiClientInterface {
         return new ApiClient(
-            clone $this->cryptocompareClient,
+            clone $this->client,
             (new ClientInformationDto())
                 ->setMethod($method)
                 ->setUriTemplate($uriTemplate),

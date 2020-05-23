@@ -10,7 +10,6 @@ use Aleksbrgt\Balances\Service\Client\DTO\Abstraction\ClientInformationDtoInterf
 use Aleksbrgt\Balances\Service\Client\DTO\Abstraction\RequestParametersDtoInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 
@@ -43,13 +42,11 @@ class ApiClient implements ApiClientInterface
      */
     public function execute(RequestParametersDtoInterface $requestDto): ResponseInterface
     {
-        return $this->client->send(
-            new Request(
-                $this->clientInformation->getMethod(),
-                $this->uriBuilder->build(
-                    $this->clientInformation,
-                    $requestDto
-                )
+        return $this->client->request(
+            $this->clientInformation->getMethod(),
+            $this->uriBuilder->build(
+                $this->clientInformation,
+                $requestDto
             ),
             [
                 RequestOptions::JSON => $requestDto->getBodyParameters() ?? [],

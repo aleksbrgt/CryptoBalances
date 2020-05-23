@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Aleksbrgt\Balances\Service\ApiIntegration\Locator;
 
-use Aleksbrgt\Balances\Entity\Address;
-use Aleksbrgt\Balances\Service\ApiIntegration\Abstraction\GetAddressInformationInterface;
+use Aleksbrgt\Balances\Service\ApiIntegration\Abstraction\GetAddressesInformationInterface;
 use RuntimeException;
 
-class GetAddressInformationLocator
+class GetAddressesInformationLocator
 {
-    /** @var iterable|GetAddressInformationInterface[] */
+    /** @var iterable|GetAddressesInformationInterface[] */
     private $services;
 
     /**
@@ -22,21 +21,21 @@ class GetAddressInformationLocator
     }
 
     /**
-     * @param Address $address
+     * @param string $currency
      *
-     * @return GetAddressInformationInterface
+     * @return GetAddressesInformationInterface
      */
-    public function locate(Address $address): GetAddressInformationInterface
+    public function locate(string $currency): GetAddressesInformationInterface
     {
         foreach ($this->services as $service) {
-            if ($service->supports($address)) {
+            if ($service->supports($currency)) {
                 return $service;
             }
         }
 
         throw new RuntimeException(sprintf(
             'Address for currency %s is not supported',
-            $address->getCurrency()
+            $currency
         ));
     }
 }

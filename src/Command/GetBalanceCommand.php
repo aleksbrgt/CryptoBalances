@@ -49,7 +49,18 @@ class GetBalanceCommand extends Command
         $table
             ->setHeaderTitle('Balances')
             ->setHeaders(['address', 'currency', 'amount', 'EUR'])
-            ->addRows($balances['addresses'])
+        ;
+
+        foreach ($balances['addresses'] as $address) {
+            $table->addRow([
+                $address['address'],
+                $address['currency'],
+                $address['balance'] ?? 'N/A',
+                $address['balance_fiat'] ?? 'N/A',
+            ]);
+        }
+
+        $table
             ->addRows([
                 new TableSeparator(),
                 [new TableCell('TOTAL', ['colspan' => 3]), $balances['total']]

@@ -20,7 +20,9 @@
         "ext-bcmath": "*"
     },
     "require-dev": {
-        "friends-of-behat/symfony-extension": "^2.0",
+        "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "friends-of-behat/symfony-extension": "^2.1",
+        "hautelook/alice-bundle": "^2.7",
         "symfony/phpunit-bridge": "^5.0",
         "symfony/var-dumper": "5.0.*"
     },

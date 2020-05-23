@@ -13,17 +13,17 @@ use GuzzleHttp\ClientInterface;
 class EtherscanClientFactory
 {
     /** @var ClientInterface */
-    private $etherscanClient;
+    private $client;
 
     /** @var EtherscanUriBuilder */
-    private $etherscanUriBuilder;
+    private $uriBuilder;
 
     public function __construct(
-        ClientInterface $etherscanClient,
-        EtherscanUriBuilder $etherscanUriBuilder
+        ClientInterface $client,
+        EtherscanUriBuilder $uriBuiler
     ) {
-        $this->etherscanClient = $etherscanClient;
-        $this->etherscanUriBuilder = $etherscanUriBuilder;
+        $this->client = $client;
+        $this->uriBuilder = $uriBuiler;
     }
 
     /**
@@ -37,11 +37,11 @@ class EtherscanClientFactory
         string $uriTemplate
     ): ApiClientInterface {
         return new ApiClient(
-            clone $this->etherscanClient,
+            clone $this->client,
             (new ClientInformationDto())
                 ->setMethod($method)
                 ->setUriTemplate($uriTemplate),
-            clone $this->etherscanUriBuilder
+            clone $this->uriBuilder
         );
     }
 }

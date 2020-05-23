@@ -1,0 +1,15 @@
+Aleksbrgt\Balances\Entity\Address:
+    address_btc_1:
+        id: d0d23022-7309-472b-bbcc-bf4a020e2c23
+        currency: BTC
+        address: 1FeexV6bAHb8ybZjqQMjJrcCrHGW9sb6uF
+
+    address_eth_1:
+        id: f3d6df18-30d5-45da-9421-8fa8380fb93e
+        currency: ETH
+        address: '0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE'
+
+    address_btc_2:
+        id: c0b0793b-26d4-4f07-b7dc-4c75a63ee24c
+        currency: BTC
+        address: 1VeMPNgEtQGurwjW2WsYXQaw4boAX5k6S

@@ -13,18 +13,18 @@ use GuzzleHttp\ClientInterface;
 class BlockchairClientFactory
 {
     /** @var ClientInterface */
-    private $blockchairClient;
+    private $client;
 
     /** @var UriBuilder */
     private $uriBuilder;
 
     /**
-     * @param ClientInterface $blockchairClient
+     * @param ClientInterface $client
      * @param UriBuilder $uriBuilder
      */
-    public function __construct(ClientInterface $blockchairClient, UriBuilder $uriBuilder)
+    public function __construct(ClientInterface $client, UriBuilder $uriBuilder)
     {
-        $this->blockchairClient = $blockchairClient;
+        $this->client = $client;
         $this->uriBuilder = $uriBuilder;
     }
 
@@ -39,7 +39,7 @@ class BlockchairClientFactory
         string $uriTemplate
     ): ApiClientInterface {
         return new ApiClient(
-            clone $this->blockchairClient,
+            clone $this->client,
             (new ClientInformationDto())
                 ->setMethod($method)
                 ->setUriTemplate($uriTemplate),
