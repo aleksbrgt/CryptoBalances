@@ -31,6 +31,15 @@ class KernelCommandContext implements Context
     }
 
     /**
+     * @BeforeScenario
+     */
+    public function cleanUp(): void
+    {
+        $this->commandOutput = null;
+        $this->commandStatusCode = null;
+    }
+
+    /**
      * @When I execute the command :commandName
      * @When I execute the command :commandName with parameters:
      *

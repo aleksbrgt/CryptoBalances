@@ -79,7 +79,7 @@ class GuzzleClientMock implements ClientInterface
     /**
      * Clear the requests and outcomes stacks
      */
-    public function clear(): void
+    public static function clear(): void
     {
         static::$requestsStack = [];
         static::$outcomeStack = [];

@@ -2,6 +2,7 @@ default:
     suites:
         default:
             contexts:
+                - Aleksbrgt\Balances\Tests\Behat\DoctrineContext
                 - Aleksbrgt\Balances\Tests\Behat\GuzzleContext
                 - Aleksbrgt\Balances\Tests\Behat\KernelCommandContext
 

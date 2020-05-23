@@ -16,6 +16,14 @@ use GuzzleHttp\Psr7\Response;
 class GuzzleContext implements Context
 {
     /**
+     * @BeforeScenario
+     */
+    public function cleanUpMock(): void
+    {
+        GuzzleClientMock::clear();
+    }
+
+    /**
      * @Given guzzle will return a :statusCode response with body:
      *
      * @param int $statusCode
