@@ -13,12 +13,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AddAddressCommand extends Command
 {
+    /** @var ValidatorInterface */
+    private $validator;
+
     /** @var AddressExists */
     private $addressExists;
 
@@ -28,12 +35,22 @@ class AddAddressCommand extends Command
     /** @var SymfonyStyle */
     private $io;
 
+    /** @var Address */
+    private $address;
+
+    /**
+     * @param ValidatorInterface $validator
+     * @param AddressExists $addressExists
+     * @param EntityManagerInterface $entityManager
+     */
     public function __construct(
+        ValidatorInterface $validator,
         AddressExists $addressExists,
         EntityManagerInterface $entityManager
     ) {
         parent::__construct();
 
+        $this->validator = $validator;
         $this->addressExists = $addressExists;
         $this->entityManager = $entityManager;
     }
@@ -45,6 +62,8 @@ class AddAddressCommand extends Command
     {
         $this
             ->setName('address:add')
+            ->addOption('currency', 'c', InputOption::VALUE_OPTIONAL, 'Address currency')
+            ->addOption('address', 'a', InputOption::VALUE_OPTIONAL, 'Address on chain')
         ;
     }
 
@@ -59,25 +78,35 @@ class AddAddressCommand extends Command
     /**
      * @inheritDoc
      */
+    protected function interact(InputInterface $input, OutputInterface $output): void
+    {
+        $this->address = (new Address())
+            ->setCurrency($input->getOption('currency') ?? $this->io->choice('Currency', AddressCurrencyEnum::VALUES))
+            ->setAddress($input->getOption('address') ?? $this->askForAddress())
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io->title('Add an address');
 
-        $currency = $this->io->choice('Currency', AddressCurrencyEnum::VALUES);
-        $blockchainAddress = $this->askForAddress();
+        $violations = $this->validator->validate($this->address);
+        if (0 < $violations->count()) {
+            $this->displayViolationErrors($violations);
 
-        $address = (new Address())
-            ->setCurrency($currency)
-            ->setAddress($blockchainAddress)
-        ;
+            return 0;
+        }
 
-        if ($this->addressExists->exists($address)) {
+        if ($this->addressExists->exists($this->address)) {
             $this->io->error('Address already exists');
 
             return 0;
         }
 
-        $this->entityManager->persist($address);
+        $this->entityManager->persist($this->address);
         $this->entityManager->flush();
 
         $this->io->success('Address added');
@@ -100,5 +129,20 @@ class AddAddressCommand extends Command
         });
 
         return $this->io->askQuestion($question);
+    }
+
+    /**
+     * @param ConstraintViolationListInterface $violations
+     */
+    private function displayViolationErrors(ConstraintViolationListInterface $violations): void
+    {
+        /** @var ConstraintViolationInterface $violation */
+        foreach ($violations as $violation) {
+            $this->io->error(sprintf(
+                'Error on "%s": %s',
+                $violation->getPropertyPath(),
+                $violation->getMessage()
+            ));
+        }
     }
 }

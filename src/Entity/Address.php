@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Aleksbrgt\Balances\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Aleksbrgt\Balances\Enum\AddressCurrencyEnum;
 
 /**
  * @ORM\Entity()
@@ -24,6 +26,9 @@ class Address
      * @var string
      *
      * @ORM\Column(type="address_currency")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Choice(choices=AddressCurrencyEnum::VALUES, message="Invalid currency")
      */
     private $currency;
 
@@ -31,6 +36,8 @@ class Address
      * @var string
      *
      * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank()
      */
     private $address;
 

@@ -57,7 +57,9 @@ class KernelCommandContext implements Context
 
         $extraParameters = [];
         if (null !== $parameters) {
-            $extraParameters = $parameters->getTable();
+            foreach ($parameters->getTable() as $parameter) {
+                $extraParameters[$parameter[0]] = $parameter[1];
+            }
         }
 
         $input = new ArrayInput(array_merge(
