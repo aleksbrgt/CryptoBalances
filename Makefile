@@ -8,8 +8,11 @@ dev.build:
 dev.bash:
 	docker exec -it balances_php /bin/bash
 
-addr.add:
+address.add:
 	docker exec -it balances_php sh -c './bin/console address:add'
+
+address.remove:
+	docker exec -it balances_php sh -c './bin/console address:remove'
 
 balance:
 	docker exec -it balances_php sh -c './bin/console balance'

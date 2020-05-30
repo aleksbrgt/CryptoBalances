@@ -97,13 +97,13 @@ class AddAddressCommand extends Command
         if (0 < $violations->count()) {
             $this->displayViolationErrors($violations);
 
-            return 0;
+            return 1;
         }
 
         if ($this->addressExists->exists($this->address)) {
             $this->io->error('Address already exists');
 
-            return 0;
+            return 1;
         }
 
         $this->entityManager->persist($this->address);

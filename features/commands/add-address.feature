@@ -23,7 +23,7 @@ Feature:
             | --currency | LTC |
             | --address  |     |
 
-        Then the command should succeed
+        Then the command should fail
         And the command output should contain '[ERROR] Error on "currency": Invalid currency'
         And the command output should contain '[ERROR] Error on "address": This value should not be blank.'
 
@@ -34,5 +34,5 @@ Feature:
             | --currency | BTC                                |
             | --address  | 1FeexV6bAHb8ybZjqQMjJrcCrHGW9sb6uF |
 
-        Then the command should succeed
+        Then the command should fail
         And the command output should contain "[ERROR] Address already exists"

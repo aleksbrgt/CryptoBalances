@@ -76,9 +76,22 @@ class KernelCommandContext implements Context
     /**
      * @Then the command should succeed
      */
-    public function theCommandShouldSucceeds(): void
+    public function theCommandShouldSucceed(): void
     {
-        if ($this->commandStatusCode !== 0) {
+        if (!$this->theCommandHasSucceeded()) {
+            throw new RuntimeException(sprintf(
+                'The command exit code is "%s"',
+                $this->commandStatusCode
+            ));
+        }
+    }
+
+    /**
+     * @Then the command should fail
+     */
+    public function theCommandShouldFail(): void
+    {
+        if ($this->theCommandHasSucceeded()) {
             throw new RuntimeException(sprintf(
                 'The command exit code is "%s"',
                 $this->commandStatusCode
@@ -114,4 +127,11 @@ class KernelCommandContext implements Context
         ));
     }
 
+    /**
+     * @return bool
+     */
+    private function theCommandHasSucceeded(): bool
+    {
+        return  0 === $this->commandStatusCode;
+    }
 }
