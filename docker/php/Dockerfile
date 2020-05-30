@@ -2,9 +2,8 @@ FROM debian:bullseye
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get upgrade & apt-get update -y
-
-RUN apt-get install -y \
+RUN apt-get upgrade && apt-get update -y && \
+    apt-get install -y \
     git \
     zip \
     php7.3 \

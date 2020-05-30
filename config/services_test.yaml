@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Aleksbrgt\Balances\Tests\Behat\:
+        resource: '../tests/Behat/*'
+
+    Aleksbrgt\Balances\Tests\Mock\:
+        resource: '../tests/Mock/*'
+
+    eight_points_guzzle.client.etherscan:
+        class: Aleksbrgt\Balances\Tests\Mock\GuzzleClientMock
+    eight_points_guzzle.client.cryptocompare:
+        class: Aleksbrgt\Balances\Tests\Mock\GuzzleClientMock
+    eight_points_guzzle.client.blockchair:
+        class: Aleksbrgt\Balances\Tests\Mock\GuzzleClientMock
